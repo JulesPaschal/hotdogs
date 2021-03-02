@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Joe's Hotdogs </title>
+</head>
+<style>
+    .row {
+    display: flex;}
+  
+  .column {
+    flex: 20%;}
+    
+</style>
+<body>
+<h1> Welcome to Joe's Hotdogs!! </h1>
+<div class="row">
+    Order Summary: <br>
+    Hotdogs: <br>
+    French Fries: <br>
+    Drinks: <br>
+    Subtotal: <br>
+    Subtotal With Discount: <br>
+    Total Cost: <br>
+    <div class= column></div>
+    <script = javascript>
+        numDogs = prompt("Welcome to Joe's Hotdogs! We sell hotdogs at $3.25 each, " +
+        "fries at $2.00 each," + " and drinks $1.50 each!" +
+        "Spend $20 to get a discount! First, how many hot dogs would you like?", "")
+        numFries = prompt("How many fries would you like?", "")
+        numDrinks = prompt("How many drinks would you like?")
+
+        document.write(".<br>")
+        document.write("" + numDogs + "<br>")
+        document.write("" + numFries + "<br>")
+        document.write("" + numDrinks + "<br>")
+        subtotal = (numDogs * 3.25) + (numFries * 2.00) + (numDrinks * 1.50)
+        document.write("$" + subtotal.toFixed(2) + "<br>")
+
+        total = subtotal * 1.0625
+        if (subtotal >= 20.0){
+            subtotalWithDiscount = subtotal * .9
+            document.write("$" + subtotalWithDiscount.toFixed(2) + "<br>")
+            total = subtotalWithDiscount * 1.0625
+        }
+        
+        document.write("$" + total.toFixed(2) + "<br>")
+
+    </script>
+
+</body>
+
+</html>
