@@ -2,6 +2,10 @@
 <html>
     <link rel = 'stylesheet' href = 'style.css' />
 <head>
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+ integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" 
+ crossorigin="anonymous"> </script>
+
 <title> Joe's Hotdogs </title>
 </head>
 <style>
@@ -12,44 +16,155 @@
     flex: 20%;}
     
 </style>
+<style type="text/css">
+	.errMsg {color: #D20E11; border: solid 1px #d20e11; display:none;  padding: 1px 15px;	}
+
+</style>
+
+<script = javascript>
+
+function MenuItem(name, cost)
+{
+	this.name = name;
+	this.cost=cost;
+}
+
+menuItems = new Array(
+	new MenuItem("Hotdogs", 3.25),
+	new MenuItem("French Fries", 2.0),
+	new MenuItem("Drinks", 1.5)
+);
+
+function makeSelect(name)
+{
+    arr = [0, 1, 2, 3, 4, 5, 10, 15, 20]
+	var t= "";
+	t = "<select name='" + name + "' size='1'>";
+	for (j=0; j<8; j++)
+	   t += "<option>" + arr[j] + "</option>";
+	t+= "</select>"; 
+	return t;
+}
+</script>
 <body>
 <h1> Welcome to Joe's Hotdogs!! </h1>
-<div class="row">
-    Order Summary: <br>
-    Hotdogs: <br>
-    French Fries: <br>
-    Drinks: <br>
-    Subtotal: <br>
-    Subtotal With Discount: <br>
-    Total Cost: <br>
+<form
+    name = "data"
+    method="post"
+    onsubmit="return validate()"> 
+
+    <p>Name*:  <input type="text"  name='name' /></p>
+	    <div id="errName" class="errMsg">Name is required!</div><br/>
+    
+
+
+    <table border="0" cellpadding="3">
+        <tr>
+          <th>Select Item</th>
+          <th>Item Name</th>
+          <th>Cost Each</th>
+          <th>Total Cost</th>
+        </tr>
+      <script language="javascript">
+      
+        var s = "";
+        for (i=0; i< menuItems.length; i++)
+        {
+            s += "<tr><td>";
+            s += makeSelect("quan" + i);
+            s += "</td><td>" + menuItems[i].name + "</td>";
+            s += "<td> $ " + menuItems[i].cost.toFixed(2) + "</td>";
+            s += "<td>$<input type='text' name='cost'/></td></tr>";
+        }
+        document.writeln(s);
+      
+       
+      </script>
+      
+      </table>
+
+      <input type = "submit" value = "Submit"/>
+      <br>
+      <div id="errTable" class="errMsg">Must be at least one item ordered!</div><br/>
+      <p>Subtotal: 
+        $<input type="text"  name='subtotal' id="subtotal" />
+     </p>
+     <p>Mass tax 6.25%:
+       $ <input type="text"  name='tax' id="tax" />
+     </p>
+     <p>Total: $ <input type="text"  name='total' id="total" />
+     </p>
+     
+    
+
+    <SCRIPT = javascript>
+
+    $(document).ready(function() {
+		$("#subtotal").val(0)
+		$("#tax").val(0)
+		$("#total").val(0)
+		
+	})
+        $('select').change(function() {
+		var price = $(this).val()
+		var name = $(this).parents("tr").children().eq(1).text()
+		var cost = $(this).parents("tr").children().eq(2).text()
+		cost = parseFloat(cost.slice(2))
+		console.log(price)
+		console.log(name)
+		console.log(cost)
+		writtenCost = cost * price
+		writtenCost = writtenCost.toFixed(2)
+		$(this).parents("tr").children().last().children("input").val(writtenCost)
+
+
+		subtotal = parseFloat($('#subtotal').val())
+		console.log("SUBTOTAL: " + $('#subtotal').val())
+		if(isNaN(subtotal)){
+			console.log('was shite')
+			subtotal = 0.0
+		}
+		subtotal = (parseFloat(subtotal) + parseFloat(writtenCost)).toFixed(2)
+		$("#subtotal").val(subtotal)
+
+		tax = (parseFloat(subtotal) * .0625).toFixed(2)
+		$("#tax").val(tax)
+
+		total = (parseFloat(subtotal) + parseFloat(tax)).toFixed(2)
+		$("#total").val(total)
+	})
+    </SCRIPT>
+
+
+
     <div class= column></div>
     <script = javascript>
-        numDogs = prompt("Welcome to Joe's Hotdogs! We sell hotdogs at $3.25 each, " +
-        "fries at $2.00 each," + " and drinks $1.50 each!" +
-        "Spend $20 to get a discount! First, how many hot dogs would you like?", "")
-        numFries = prompt("How many fries would you like?", "")
-        numDrinks = prompt("How many drinks would you like?")
 
-        document.write(".<br>")
-        document.write("" + numDogs + "<br>")
-        document.write("" + numFries + "<br>")
-        document.write("" + numDrinks + "<br>")
-        subtotal = (numDogs * 3.25) + (numFries * 2.00) + (numDrinks * 1.50)
-        document.write("$" + subtotal.toFixed(2) + "<br>")
+        function validate(){
 
-        total = subtotal * 1.0625
-        if (subtotal >= 20.0){
-            subtotalWithDiscount = subtotal * .9
-            document.write("$" + subtotalWithDiscount.toFixed(2) + "<br>")
-            total = subtotalWithDiscount * 1.0625
+     
+		document.getElementById("errTable").style.display = "none";
+        document.getElementById("errName").style.display = "none";
+		err = false
+		with (document.data){
+			
+			if(subtotal.value == '0'){
+				document.getElementById("errTable").style.display = "inline-block";
+				err=true;
+			}
+            if (name.value == ""){
+				document.getElementById("errName").style.display = "inline-block";
+				err=true;
+			}
+            else {
+                alert("Order placed for " + name.value + "!\n Your total was $" + total.value )
+            }
         }
-        else{
-            document.write("$" + subtotal.toFixed(2) + "<br>")
-        }
-        
-        document.write("$" + total.toFixed(2) + "<br>")
+		return !err
 
+	}
     </script>
+</form>
 
 </body>
 
